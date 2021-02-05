@@ -36,5 +36,11 @@ data3 + geom_point() + geom_smooth(method = lm)
 # Model results 
 >with comments on model fit metrics
 
+```{r}
+summary.lm(model.1)
+summary.lm(model.2)
+summary.lm(model.3)
+```
+
 # Model comparison  
 >model1 vs model3, with anova. 
