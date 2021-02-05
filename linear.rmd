@@ -1,1 +1,27 @@
-testing
+---
+title: "WUP_Linear"
+author: "Anjolie Barrios"
+date: "fall 2020"
+output: 
+  html_document:
+    number_sections: true
+    toc: true
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(tidyverse)
+require(tidyverse)
+require(knitr)
+linear <- read.csv(file="http://onlinestatbook.com/case_studies_rvls/physical_strength/data.txt",sep="",header=TRUE)
+if(!require("rglwidget")) {install.packages("rglwidget");require("rglwidget")}
+```
+
+# Displays
+>Scatterplots of data with fits  
+
+
+# Model results 
+>with comments on model fit metrics
+
+# Model comparison  
+>model1 vs model3, with anova. 
