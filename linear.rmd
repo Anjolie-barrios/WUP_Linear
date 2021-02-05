@@ -17,8 +17,21 @@ if(!require("rglwidget")) {install.packages("rglwidget");require("rglwidget")}
 ```
 
 # Displays
->Scatterplots of data with fits  
+>Scatterplots of data with fits 
 
+```{r}
+model.1 <- lm(SIMS ~ ARM, data = linear)
+data1 <- ggplot(linear,aes(y=SIMS,x=ARM))
+data1 + geom_point() + geom_smooth(method = lm)
+  
+model.2 <- lm(SIMS ~ GRIP, data = linear)
+data2 <- ggplot(linear,aes(y=SIMS,x=GRIP))
+data2 + geom_point() + geom_smooth(method = lm)
+  
+model.3 <- lm(SIMS ~ ARM+GRIP, data = linear)
+data3 <- ggplot(linear,aes(y=SIMS,x=ARM+GRIP))
+data3 + geom_point() + geom_smooth(method = lm)
+```
 
 # Model results 
 >with comments on model fit metrics
