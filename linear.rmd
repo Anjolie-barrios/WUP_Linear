@@ -1,7 +1,7 @@
 ---
 title: "WUP_Linear"
 author: "Anjolie Barrios"
-date: "fall 2020"
+date: " 2020"
 output: 
   html_document:
     number_sections: true
@@ -17,11 +17,101 @@ if(!require("rglwidget")) {install.packages("rglwidget");require("rglwidget")}
 ```
 
 # Displays
->Scatterplots of data with fits  
+>Scatterplots of data with fits 
 
+```{r}
+model.1 <- lm(SIMS ~ ARM, data = linear)
+pred1 <- predict(model.1, interval="prediction")
+new_df1 <- cbind(linear, pred1)
+ggplot(new_df1, aes(ARM, SIMS))+
+    geom_point() +
+    geom_line(aes(y=lwr), color = "red", linetype = "dashed")+
+    geom_line(aes(y=upr), color = "red", linetype = "dashed")+
+    geom_smooth(method=lm, se=TRUE)
+  
+model.2 <- lm(SIMS ~ GRIP, data = linear)
+pred2 <- predict(model.2, interval="prediction")
+new_df2 <- cbind(linear, pred2)
+ggplot(new_df2, aes(GRIP, SIMS))+
+    geom_point() +
+    geom_line(aes(y=lwr), color = "red", linetype = "dashed")+
+    geom_line(aes(y=upr), color = "red", linetype = "dashed")+
+    geom_smooth(method=lm, se=TRUE)
+  
+model.3 <- lm(SIMS ~ ARM+GRIP, data = linear)
+pred3 <- predict(model.3, interval="prediction")
+new_df3 <- cbind(linear, pred3)
+ggplot(new_df3, aes(ARM+GRIP, SIMS))+
+    geom_point() +
+    geom_line(aes(y=lwr), color = "red", linetype = "dashed")+
+    geom_line(aes(y=upr), color = "red", linetype = "dashed")+
+    geom_smooth(method=lm, se=TRUE)
+```
 
 # Model results 
 >with comments on model fit metrics
 
-# Model comparison  
+## Model 1 (SIMS vs ARM)
+```{r}
+summary.lm(model.1)
+newmodel1 = data.frame(GRIP = 94, ARM = 88)
+```
+  
+The Multiple and Adjusted R- squared values tell us the amount of errors that were explained by the model; a higher value (this model having being ~0.47) is better.  
+
+```{r}
+predict(model.1, newmodel1, interval="prediction")
+predict(model.1, newmodel1, interval="confidence") 
+```
+  
+As seen above, the 95% prediction interval for SIMS, given ARM = 88, is a -1.7262 to 3.139 score. 4.8652 is the difference, and 0.7064 is in the middle.  
+When manually calculating with a y=mx+b formula and replacing ARM with 88...    
+[SIMS] = 0.054563 * (ARM) - 4.095160  
+[SIMS] = 0.706384  
+  
+Residual standard error is 1.226, but the SIMS value we found is actually ~2.4326 units away from the upper and lower barriers of the interval. 2.4326/2 = 1.2163, which close enough to 1.226 to confirm that:  
+The residual standard error is always 1/4 of the distance between the lower and upper barriers. Below is a picture to illustrate this:  
+<img src="No_line.jpg" alt="alternatetext">  
+  
+The confidence interval, however, is much more specific, at a 0.4881 to 0.9247 score.  
+  
+## Model 2 (SIMS vs GRIP)
+```{r}
+summary.lm(model.2)
+```
+  
+Since model 2 has a lower R- squared value (~0.41) than model 1, it can be assumed that model 1, using ARM to predict SIMS, is the better one. 
+
+```{r}
+predict(model.2, newmodel1, interval="prediction")
+predict(model.2, newmodel1, interval="confidence") 
+```
+  
+In model 2, the 95% confidence interval for SIMS, given GRIP = 94, is from -0.7925 to -0.2798, and the estimated value for SIMS is -0.5362 (in the middle).  
+
+## Model 3 (SIMS vs ARM and GRIP)
+```{r}
+summary.lm(model.3)
+```
+  
+Since this model has the highest R- squared values at 0.5422 and 0.5358, it can be assumed that model 3, which uses both ARM and GRIP, is the most effective.  
+
+```{r}
+predict(model.3, newmodel1, interval="prediction")
+predict(model.3, newmodel1, interval="confidence")
+```
+  
+SIMS can be calculated with this equation:  
+SIMS = 0.0373 * (ARM) + 0.0245 * (GRIP) - 5.4339, which is y= mx + b, except there's another unique mx variable.  
+  
+SIMS, given ARM and GRIP, has a confidence interval of -0.1591 to 0.4584 with 0.1496 in the middle.   
+
+# Model comparison
 >model1 vs model3, with anova. 
+
+```{r}
+anova(model.1,model.3)
+anova(model.2,model.3)
+```
+  
+Clearly, the SIMS vs ARM + GRIP model is far more accurate than SIMS vs ARM or SIMS vs GRIP, because its RSS value is far lower than both at ~188. Residual Sum of Squares estimates the variance in each regression model (compared to the observed results). Model 1 is slightly better than model 2, but SIMS vs ARM is closer to model 3 than SIMS vs GRIP is, since the p- value is higher in the first comparison. That means, if the compared models are just as effective as each other, the data will be exactly as recorded with ~0.000005 and ~0.000000001 chances respectively. 
