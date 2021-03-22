@@ -36,11 +36,34 @@ data3 + geom_point() + geom_smooth(method = lm)
 # Model results 
 >with comments on model fit metrics
 
+## Model 1 (SIMS vs ARM)
 ```{r}
 summary.lm(model.1)
-summary.lm(model.2)
-summary.lm(model.3)
+newmodel1 = data.frame(GRIP = 94, ARM = 88)
+predict(model.1, newmodel1, interval="predict") 
 ```
+As seen above, the 95% prediction interval for SIMS, given ARM = 88, is a -1.7262 to 3.139 score. 4.8652 is the difference, and 0.7064 is in the middle.  
+When manually calculating with a y=mx+b formula and replacing ARM with 88...    
+[SIMS] = 0.054563 * [ARM] - 4.095160  
+[SIMS] = 0.706384
+  
+Residual standard error is 1.226, but the SIMS value we found is actually ~2.4326 units away from the upper and lower barriers of the interval. 2.4326/2 = 1.2163, which close enough to 1.226 to confirm that:  
+The residual standard error is always 1/4 of the distance between the lower and upper barriers. Below is a picture to illustrate this:  
+<img src="No_line.jpg" alt="alternatetext">
+  
+## Model 2 (SIMS vs GRIP)
+```{r}
+summary.lm(model.2)
+predict(model.2, newmodel1, interval="predict")
+```
+In model 2, the 95% prediction interval for SIMS, given GRIP = 94, is from -3.108 to 2.0357, and the estimated value for SIMS is -0.5362 (in the middle).  
+
+#Model 3 (SIMS vs ARM and GRIP)
+```{r}
+summary.lm(model.3)
+predict(model.3, newmodel1, interval="predict")
+```
+
 
 # Model comparison  
 >model1 vs model3, with anova. 
