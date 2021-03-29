@@ -52,7 +52,7 @@ In the first graph for each model, the red dotted lines show the prediction band
 polyfitGC(SIMS~ARM,data=linear,degree=3,check=TRUE)
 polyfitGC(SIMS~GRIP,data=linear,degree=3,check=TRUE)
 ```
-The polyfits seem to be more accurate than their respective linear models, but since the polyfits can't consider both ARM and GRIP at the same time as SIMS, model 3 is likely more accurate.  
+The polyfits seem to be more accurate than their respective linear models, but since the polyfits can't consider both ARM and GRIP at the same time as SIMS, model 3 is likely the most accurate.  
 # Model results 
 >with comments on model fit metrics
 
