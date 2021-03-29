@@ -37,7 +37,7 @@ ggplot(new_df2, aes(GRIP, SIMS))+
     geom_line(aes(y=lwr), color = "red", linetype = "dashed")+
     geom_line(aes(y=upr), color = "red", linetype = "dashed")+
     geom_smooth(method=lm, se=TRUE)
-  
+
 model.3 <- lm(SIMS ~ ARM+GRIP, data = linear)
 pred3 <- predict(model.3, interval="prediction")
 new_df3 <- cbind(linear, pred3)
@@ -47,7 +47,12 @@ ggplot(new_df3, aes(ARM+GRIP, SIMS))+
     geom_line(aes(y=upr), color = "red", linetype = "dashed")+
     geom_smooth(method=lm, se=TRUE)
 ```
-
+In the first graph for each model, the red dotted lines show the prediction bands; as opposed to confidence intervals (which include the blue line and the gray attached to it), prediction intervals are designed to predict future observations. 
+```{r}
+polyfitGC(SIMS~ARM,data=linear,degree=3,check=TRUE)
+polyfitGC(SIMS~GRIP,data=linear,degree=3,check=TRUE)
+```
+The polyfits seem to be more accurate than their respective linear models, but since the polyfits can't consider both ARM and GRIP at the same time as SIMS, model 3 is likely more accurate.  
 # Model results 
 >with comments on model fit metrics
 
